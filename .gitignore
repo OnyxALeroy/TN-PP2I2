@@ -1,0 +1,5 @@
+# Ignore all temporary files of a .tek but the .png
+*.tek
+*.log
+*.aux
+*.synctex.gz
