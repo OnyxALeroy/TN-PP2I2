@@ -28,7 +28,7 @@ int main() {
     // INITS //////////////////////////////////////////////////////////////////////
 
     SDL_Surface* surf_perso = SDL_LoadBMP("../assets/perso.bmp");
-    Main_Perso* perso = create_perso(WIDTH/2, HEIGHT/2, 1, surf_perso, 1, renderer);
+    Main_Perso* perso = create_perso(WIDTH/2, HEIGHT/2, 3, surf_perso, 1, renderer);
     SDL_FreeSurface(surf_perso);
 
     SDL_Rect bloc_perso;
@@ -37,6 +37,7 @@ int main() {
     int y2;
 
     int xc, yc;
+    double gap_x, gap_y, delta_x, delta_y, alpha = 0;
 
     ///////////////////////////////////////////////////////////////////////////////
 
@@ -51,13 +52,32 @@ int main() {
             {
             case SDL_QUIT:
                 running = 0;
-                break;
+                continue;
+
             case SDL_MOUSEBUTTONDOWN:
                 follow = 1;
-                break;
+                continue;
+
             case SDL_MOUSEBUTTONUP:
                 follow = 0;
-                break;
+                gap_x = 0;
+                gap_y = 0;
+                continue;
+
+            case SDL_MOUSEMOTION:
+                if (follow) {
+                    SDL_GetMouseState(&xc, &yc);
+
+                    delta_x = xc - ((2*(perso->x)+(perso->width))/2);
+                    delta_y = yc - ((2*(perso->y)+(perso->height))/2);
+
+                    alpha = atan2(delta_y, delta_x);
+
+                    gap_x = (perso->speed)*cos(alpha);
+                    gap_y = (perso->speed)*sin(alpha);
+                }
+                continue;
+
             default:
                 break;
             }
@@ -66,29 +86,16 @@ int main() {
 
         // changements états
 
-        Uint32 buttons = SDL_GetMouseState(&xc, &yc);
-
-        if (follow) {
-            double delta_x = xc - (perso->x);
-            double delta_y = yc - (perso->y);
-
-            double alpha = atan(delta_y/delta_x);
-
-            int gap_x = (perso->speed)*cos(alpha);
-            int gap_y = (perso->speed)*sin(alpha);
-
-            (perso->x) += gap_x;
-            (perso->y) += gap_y;
-        }
+        (perso->x) += gap_x;
+        (perso->y) += gap_y;
 
         //rendu graphique
 
         SDL_RenderClear(renderer);
 
-        printf("%d, %d\n\n", xc, yc);
         render_perso(perso, renderer, bloc_perso);
 
-        SDL_Delay(50);
+        SDL_Delay(20);
 
         SDL_RenderPresent(renderer);
     }
