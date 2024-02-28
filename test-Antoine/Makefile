@@ -10,6 +10,7 @@ endif
 ifeq ($(shell uname),Linux)
 	INC_DIR += -I/usr/include
 	LIB_DIR += -L/usr/lib
+endif
 LIBS = -lSDL2 -lSDL2_ttf
 
 all : main.out
