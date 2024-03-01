@@ -1,0 +1,11 @@
+#include <SDL2/SDL.h>
+#include "structs.h"
+SDL_Rect snake_rects[1000];
+Point food;
+Direction current_direction;
+int snake_length;
+int game_over;
+int last_move_time;
+void generate_food(void);
+void update_snake(void);
+void check_collision(void);
