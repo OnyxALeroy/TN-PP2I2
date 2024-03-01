@@ -1,5 +1,7 @@
 CC = clang
 CFLAGS = -std=c99 -Wall -Wextra -pedantic -g3
+SOURCES = main.c map.c rendering.c
+TARGET = main
 LDFLAGS =
 LIBS = -I/usr/lib/cmake/SDL2 -lSDL2 -lm
 

@@ -39,6 +39,13 @@ int main() {
     int xc, yc;
     double gap_x, gap_y, delta_x, delta_y, alpha = 0;
 
+
+    SDL_Surface* surf_map = SDL_LoadBMP("../assets/test_map.bmp");
+    SDL_Texture* text_map = SDL_CreateTextureFromSurface(renderer, surf_map);
+    SDL_FreeSurface(surf_map);
+    Map* supp_map = create_map(0, 0, 7*32, 7*44, text_map);;
+    Map* test_map = create_map(WIDTH/2 - 7*16, HEIGHT/2 - 7*22, 7*32, 7*44, text_map);
+
     ///////////////////////////////////////////////////////////////////////////////
 
     SDL_Event event;
@@ -93,7 +100,9 @@ int main() {
 
         SDL_RenderClear(renderer);
 
+        render_map(test_map, renderer, supp_map);
         render_perso(perso, renderer, bloc_perso);
+        
 
         SDL_Delay(20);
 
