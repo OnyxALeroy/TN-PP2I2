@@ -6,7 +6,7 @@ void Init_Snake(void) {
     for (int i = 0; i < snake_length; i++) {
         snake_rects[i].x = WIDTH / 2 - i * GRID_SIZE;
         snake_rects[i].y = HEIGHT / 2;
-        snake_rects[i].w = snake_rects[i].h = GRID_SIZE;
+        snake_rects[i].w = snake_rects[i].h = GRID_SIZE-1;
     }
 }
 
