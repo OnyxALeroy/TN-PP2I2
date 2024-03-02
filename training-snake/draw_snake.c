@@ -31,11 +31,4 @@ void update_snake(void) {
         snake_rects[0].x += GRID_SIZE;
         break;
     }
-
-    // Vérification de la collision avec la nourriture
-    if (snake_rects[0].x == food.x && snake_rects[0].y == food.y)
-    {
-        snake_length++;
-        generate_food();
-    }
 }

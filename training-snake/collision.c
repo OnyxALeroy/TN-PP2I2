@@ -9,6 +9,12 @@ void check_collision(void) {
         game_over = 1;
     }
 
+    //Colision entre le serpent et la nourriture
+    if (snake_rects[0].x == food.x && snake_rects[0].y == food.y) {
+        snake_length++;
+        generate_food();
+    }
+
     // Collision avec le corps du serpent
     for (int i = 1; i < snake_length; i++) {
         if (snake_rects[0].x == snake_rects[i].x && snake_rects[0].y == snake_rects[i].y) {
