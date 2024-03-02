@@ -27,23 +27,35 @@ int main() {
 
     // INITS //////////////////////////////////////////////////////////////////////
 
-    SDL_Surface* surf_perso = SDL_LoadBMP("../assets/perso.bmp");
-    Main_Perso* perso = create_perso(WIDTH/2, HEIGHT/2, 3, surf_perso, 1, renderer);
+    double time = 0;
+
+    SDL_Surface* surf_perso = SDL_LoadBMP("../assets/persos.bmp");
+    int sprites_perso[4][3][4] = {
+        {
+            {66, 0, 26, 44}, {386, 128, 26, 44}, {416, 126, 28, 44}
+        },
+        {
+            {30, 0, 32, 44}, {254, 128, 30, 44}, {222, 126, 32, 46}
+        },
+        {
+            {0, 0, 26, 44}, {0, 128, 26, 44}, {32, 126, 28, 44}
+        },
+        {
+            {94, 0, 52, 44}, {576, 126, 30, 44}, {608, 128, 30, 44}
+        }
+    };
+    Main_Perso* perso = create_perso(WIDTH/2, HEIGHT/2, 3, surf_perso, 3, renderer, 0, sprites_perso);
     SDL_FreeSurface(surf_perso);
 
-    SDL_Rect bloc_perso;
+    SDL_Rect dest_perso;
 
-    int x2;
-    int y2;
-
-    int xc, yc;
-    double gap_x, gap_y, delta_x, delta_y, alpha = 0;
-
+    Point* mouse_coos = create_point(0, 0);
+    Point* gaps = create_point(0, 0);
 
     SDL_Surface* surf_map = SDL_LoadBMP("../assets/test_map.bmp");
     SDL_Texture* text_map = SDL_CreateTextureFromSurface(renderer, surf_map);
     SDL_FreeSurface(surf_map);
-    Map* supp_map = create_map(0, 0, 7*32, 7*44, text_map);;
+    Map* supp_map = create_map(0, 0, 7*32, 7*44, text_map);
     Map* test_map = create_map(WIDTH/2 - 7*16, HEIGHT/2 - 7*22, 7*32, 7*44, text_map);
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -67,21 +79,14 @@ int main() {
 
             case SDL_MOUSEBUTTONUP:
                 follow = 0;
-                gap_x = 0;
-                gap_y = 0;
+                gaps->x = 0;
+                gaps->y = 0;
+                perso->is_moving = 0;
                 continue;
 
             case SDL_MOUSEMOTION:
                 if (follow) {
-                    SDL_GetMouseState(&xc, &yc);
-
-                    delta_x = xc - ((2*(perso->x)+(perso->width))/2);
-                    delta_y = yc - ((2*(perso->y)+(perso->height))/2);
-
-                    alpha = atan2(delta_y, delta_x);
-
-                    gap_x = (perso->speed)*cos(alpha);
-                    gap_y = (perso->speed)*sin(alpha);
+                    get_basic_coos(mouse_coos, gaps, perso);
                 }
                 continue;
 
@@ -93,15 +98,23 @@ int main() {
 
         // changements états
 
-        (perso->x) += gap_x;
-        (perso->y) += gap_y;
+        time = SDL_GetTicks();
+
+        if (follow) {
+            move_map(test_map, gaps->x, gaps->y);
+        }
 
         //rendu graphique
 
         SDL_RenderClear(renderer);
 
         render_map(test_map, renderer, supp_map);
-        render_perso(perso, renderer, bloc_perso);
+        if (perso->is_moving) {
+            render_perso_animated(perso, renderer, dest_perso, time);
+        }
+        else {
+            render_perso(perso, renderer, dest_perso);
+        }
         
 
         SDL_Delay(20);
