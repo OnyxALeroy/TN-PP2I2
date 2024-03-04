@@ -3,16 +3,15 @@
 #include "rendering.h"
 #include "sdl_init.h"
 #include "defs.h"
-#include "main.h"
 
 int main(void) {
     SDL_Renderer *renderer = Init_SDL();
 
     // INITS //////////////////////////////////////////////////////////////////////
-
     double time = 0;
 
-    surf_perso = SDL_LoadBMP("../assets/persos.bmp");
+    SDL_Surface* surf_perso = SDL_LoadBMP("../assets/persos.bmp");
+
     int sprites_perso[4][3][4] = {
         {
             {66, 0, 26, 44}, {386, 128, 26, 44}, {416, 126, 28, 44}
