@@ -1,35 +1,18 @@
 #include <SDL2/SDL.h>
-#include <SDL2/SDL_image.h>
 #include <math.h>
 #include "rendering.h"
+#include "sdl_init.h"
+#include "defs.h"
+#include "main.h"
 
-int main() {
-    if (SDL_Init(SDL_INIT_EVERYTHING) != 0) {
-        SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Error in init: %s", SDL_GetError());
-        exit(-1);
-    }
-
-    SDL_Window* window;
-    window = SDL_CreateWindow("SDL Window", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, WIDTH, HEIGHT, SDL_WINDOW_SHOWN);
-
-    if (window == NULL) {
-        SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Error in window init: %s", SDL_GetError());
-        exit(-1);
-    }
-    
-    SDL_Renderer* renderer;
-    renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
-    if (renderer == NULL) {
-        SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Error in renderer init: %s", SDL_GetError());
-        exit(-1);
-    }
-
+int main(void) {
+    SDL_Renderer *renderer = Init_SDL();
 
     // INITS //////////////////////////////////////////////////////////////////////
 
     double time = 0;
 
-    SDL_Surface* surf_perso = SDL_LoadBMP("../assets/persos.bmp");
+    surf_perso = SDL_LoadBMP("../assets/persos.bmp");
     int sprites_perso[4][3][4] = {
         {
             {66, 0, 26, 44}, {386, 128, 26, 44}, {416, 126, 28, 44}

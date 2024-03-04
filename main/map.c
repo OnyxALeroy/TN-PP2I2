@@ -1,6 +1,7 @@
 #include <SDL2/SDL.h>
 #include "map.h"
 #include <math.h>
+#include "defs.h"
 
 Point* create_point(int x, int y) {
     Point* point = malloc(sizeof(Point));

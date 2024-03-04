@@ -1,6 +1,7 @@
 #include <SDL2/SDL.h>
 #include "rendering.h"
 #include <time.h>
+#include "defs.h"
 
 void render_perso(Main_Perso* perso, SDL_Renderer* renderer, SDL_Rect dest) {
     int dir = (perso->direction);
