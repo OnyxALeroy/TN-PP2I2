@@ -1,37 +1,31 @@
+#files
+TARGET = main
+SRCS = main.c rendering.c map.c sdl_init.c
+OBJS = $(SRCS:.c=.o)
+
+#compiler
 CC = clang
-CFLAGS = -Wall -std=c99 -Wextra -pedantic -fsanitize=address -Wnewline-eof
-LDFLAGS = -fsanitize=address -Wnewline-eof
-INC_DIR =
-LIB_DIR =
-ifeq ($(shell uname),Darwin)
-	INC_DIR += -I/opt/homebrew/include
-	LIB_DIR += -L/opt/homebrew/lib
-endif
-ifeq ($(shell uname),Linux)
-	INC_DIR += -I/usr/include
-	LIB_DIR += -L/usr/lib
-endif
-LIBS = -lSDL2
+CFLAGS = -Wall -std=c99 -Wextra -pedantic -O3
 
-all: main.out
+#linker
+CFLAGS += -g
+CFLAGS += -fsanitize=address -fno-omit-frame-pointer
+LDFLAGS += -fsanitize=address
 
-main.out: main.o rendering.o map.o sdl_init.o
-	$(CC) $(LDFLAGS) $(LIB_DIR) -o main.out main.o rendering.o map.o sdl_init.o $(LIBS)
+#libraries
+CFLAGS += $(shell pkg-config --cflags sdl2)
+LDFLAGS += $(shell pkg-config --libs sdl2)
 
-main.o: main.c
-	$(CC) -c $(CFLAGS) $(INC_DIR) main.c sdl_init.h rendering.h defs.h
+all: $(TARGET)
 
-rendering.o: rendering.c rendering.h
-	$(CC) -c $(CFLAGS) $(INC_DIR) rendering.c rendering.h defs.h
+$(TARGET): $(OBJS)
+	$(CC) $^ $(LDFLAGS) -o $@
 
-map.o: map.c map.h
-	$(CC) -c $(CFLAGS) $(INC_DIR) map.c map.h defs.h
-
-sdl_init.o: sdl_init.c sdl_init.h
-	$(CC) -c $(CFLAGS) $(INC_DIR) sdl_init.c sdl_init.h defs.h
+%.o: %.c
+	$(CC) $(CFLAGS) -c $< -o $@
 
 clean:
-	rm -f *.o *.out *.h.gch
+	rm -f *.o *.h.gch $(TARGET)
 
-run: main.out
-	./main.out
+run: $(TARGET)
+	./$(TARGET)
