@@ -1,6 +1,6 @@
 #files
 TARGET = main
-SRCS = main.c rendering.c map.c sdl_init.c
+SRCS = main.c sdl_init.c
 OBJS = $(SRCS:.c=.o)
 
 #compiler

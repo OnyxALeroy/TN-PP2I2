@@ -4,7 +4,7 @@
 #include "defs.h"
 
 int main(void){
-
+/*
     SDL_Renderer* renderer = Init_SDL();
 
     // INITS //////////////////////////////////////////////////////////////////////
@@ -31,7 +31,7 @@ int main(void){
         }
 
     }
-
+*/
 
 
 
